@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar, TextInput, Dimensions, Platform, ScrollView } from 'react-native';
+import Todo from './Todo';
 
 
 const { height ,width } = Dimensions.get("window");
@@ -26,6 +27,9 @@ export default class App extends React.Component {
             autoCorrect={false}
           />
         </View>
+        <ScrollView>
+          <Todo />          
+        </ScrollView>
       </View>
     );
   }
