@@ -1,21 +1,40 @@
 import React from 'react';
-import { StyleSheet, Text, View, StatusBar, TextInput, Dimensions, Platform } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TextInput, Dimensions, Platform, ScrollView } from 'react-native';
 
 
 const { height ,width } = Dimensions.get("window");
 
 export default class App extends React.Component {
+
+  state = {
+    newTodo: ""
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
         <Text style={styles.title}>What To Do</Text>
         <View style={styles.card}>
-          <TextInput style={styles.input} placeholder="{New To Do}" />
+          <TextInput 
+            style={styles.input} 
+            placeholder={"New To Do"}
+            value={newTodo} 
+            onChangeText={this._controlNewTodo}
+            placeholderTextColor={"#999"}
+            returnKeyType={"done"}
+            autoCorrect={false}
+          />
         </View>
       </View>
     );
   }
+
+  _controlNewTodo = text => {
+    this.setState({
+      newTodo: text
+    });
+  };
 }
 
 const styles = StyleSheet.create({
