@@ -1,2 +1,2 @@
 # todo-app-React-Native
-Todo manage app with React Native
+Todo management app with React Native
