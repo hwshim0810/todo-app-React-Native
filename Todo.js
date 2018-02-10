@@ -50,7 +50,7 @@ export default class Todo extends Component {
                             onChangeText={this._controllInput}
                             onBlur={this._finishEditing}
                             returnKeyType={"done"}
-                            underlineColorAndroid="transparent"
+                            underlineColorAndroid={"transparent"}
                         />
                     ) : (
                         <Text 
