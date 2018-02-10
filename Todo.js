@@ -78,7 +78,10 @@ export default class Todo extends Component {
                                 <Text style={styles.actionText}>🖊</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPressOut={() => deleteTodo(id)}>
+                        <TouchableOpacity onPressOut={(event) => {
+                            event.stopPropagation();
+                            deleteTodo(id);
+                        }}>
                             <View style={styles.actionContainer}>
                                 <Text style={styles.actionText}>❌</Text>
                             </View>
@@ -89,7 +92,9 @@ export default class Todo extends Component {
         );
     }
 
-    _toggleComplete = () => {
+    // Touchable opacity 에서 Scrollview 로의 전파중지
+    _toggleComplete = (event) => {
+        event.stopPropagation();
         const { id, isCompleted, uncompleteToDo, completeToDo } = this.props;
 
         if (isCompleted) {
@@ -99,13 +104,15 @@ export default class Todo extends Component {
         }
     };
 
-    _startEditing = () => {
+    _startEditing = (event) => {
+        event.stopPropagation();
         this.setState({
             isEditing: true
         });
     };
 
-    _finishEditing = () => {
+    _finishEditing = (event) => {
+        event.stopPropagation();
         const { toDoValue } = this.state;
         const { id, updateToDo } = this.props;
         updateToDo(id, toDoValue);
