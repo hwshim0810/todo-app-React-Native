@@ -24,8 +24,8 @@ export default class Todo extends Component {
 
     render() {
         
-        const { isCompleted, isEditing, toDoValue } = this.state;
-        const { text, id, deleteTodo } = this.props;
+        const { isEditing, toDoValue } = this.state;
+        const { text, id, deleteTodo, isCompleted } = this.props;
 
         return (
             <View style={styles.container}>
@@ -86,11 +86,13 @@ export default class Todo extends Component {
     }
 
     _toggleComplete = () => {
-        this.setState(prevState => {
-            return ({
-                isCompleted: !prevState.isCompleted
-            });
-        });
+        const { id, isCompleted, uncompleteToDo, completeToDo } = this.props;
+
+        if (isCompleted) {
+            uncompleteToDo(id)
+        } else {
+            completeToDo(id)
+        }
     };
 
     _startEditing = () => {
