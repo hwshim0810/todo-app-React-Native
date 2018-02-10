@@ -19,7 +19,10 @@ export default class Todo extends Component {
         id: PropTypes.string.isRequired,
         text: PropTypes.string.isRequired,
         isCompleted: PropTypes.bool.isRequired,
-        deleteTodo: PropTypes.func.isRequired
+        deleteTodo: PropTypes.func.isRequired,
+        completeToDo: PropTypes.func.isRequired,
+        uncompleteToDo: PropTypes.func.isRequired,
+        updateToDo: PropTypes.func.isRequired
     }
 
     render() {
@@ -47,6 +50,7 @@ export default class Todo extends Component {
                             onChangeText={this._controllInput}
                             onBlur={this._finishEditing}
                             returnKeyType={"done"}
+                            underlineColorAndroid="transparent"
                         />
                     ) : (
                         <Text 
@@ -102,6 +106,9 @@ export default class Todo extends Component {
     };
 
     _finishEditing = () => {
+        const { toDoValue } = this.state;
+        const { id, updateToDo } = this.props;
+        updateToDo(id, toDoValue);
         this.setState({
             isEditing: false
         });
@@ -162,7 +169,6 @@ const styles = StyleSheet.create({
         marginHorizontal:10
     },
     input: {
-        marginVertical: 15,
         width: width/2
     }
 })

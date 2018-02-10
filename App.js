@@ -42,6 +42,7 @@ export default class App extends React.Component {
             returnKeyType={"done"}
             autoCorrect={false}
             onSubmitEditing={this._addTodo}
+            underlineColorAndroid="transparent"
           />
           <ScrollView contentContainerStyle={styles.toDos}>
             {Object.values(toDos).map(toDo => (
@@ -50,6 +51,7 @@ export default class App extends React.Component {
                 deleteTodo={this._deleteTodo} 
                 uncompleteToDo={this._uncompleteToDo}
                 completeToDo={this._completeToDo}
+                updateToDo={this._updateToDo}
                 {...toDo} 
               />
             ))}
@@ -140,7 +142,23 @@ export default class App extends React.Component {
       };
       return {...newState};
     });
-  }
+  };
+
+  _updateToDo = (id, text) => {
+    this.setState(prevState => {
+      const newState = {
+        ...prevState,
+        toDos: {
+          ...prevState.toDos,
+          [id]: {
+            ...prevState.toDos[id],
+            text: text
+          }
+        }
+      };
+      return {...newState};
+    });
+  };
 }
 
 const styles = StyleSheet.create({
