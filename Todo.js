@@ -19,7 +19,7 @@ export default class Todo extends Component {
 
         return (
             <View style={styles.container}>
-                <View styles={styles.column}>
+                <View style={styles.column}>
                     <TouchableOpacity onPress={this._toggleComplete}>
                         <View style={[
                             styles.circle, isCompleted ? styles.completedCircle : styles.uncompletedCircle
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
         width: width - 50,
         borderBottomColor: "#bbb",
         borderBottomWidth: StyleSheet.hairlineWidth,
-        flexDirections: "row",
+        flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between"
     },
@@ -142,12 +142,12 @@ const styles = StyleSheet.create({
     },
     column: {
         width: width/2,
-        flexDirections: "row",
+        flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between"
     },
     actions: {
-        flexDirections: "row"
+        flexDirection: "row"
     },
     actionContainer: {
         marginVertical: 10,
