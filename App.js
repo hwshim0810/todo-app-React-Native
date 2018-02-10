@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, StatusBar, TextInput, Dimensions, Platform, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TextInput, Dimensions, Platform, ScrollView, AsyncStorage } from 'react-native';
 import { AppLoding, AppLoading } from 'expo';
 import uuidv1 from 'uuid/v1';
 
@@ -45,7 +45,7 @@ export default class App extends React.Component {
             underlineColorAndroid="transparent"
           />
           <ScrollView contentContainerStyle={styles.toDos}>
-            {Object.values(toDos).map(toDo => (
+            {Object.values(toDos).reverse().map(toDo => (
               <Todo 
                 key={toDo.id} 
                 deleteTodo={this._deleteTodo} 
@@ -67,10 +67,17 @@ export default class App extends React.Component {
     });
   };
 
-  _loadToDos = () => {
-    this.setState({
-      loadedToDos: true
-    });
+  _loadToDos = async () => {
+    try {
+      const toDos = await AsyncStorage.getItem("toDos");
+      const parsedToDos = JSON.parse(toDos);
+      this.setState({
+        loadedToDos: true,
+        toDos: parsedToDos === null ? {} : parsedToDos
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   _addTodo = () => {
@@ -95,6 +102,7 @@ export default class App extends React.Component {
             ...newTodoObject
           }
         };
+        this._saveToDos(newState.toDos);
         return { ...newState };
       });
     }
@@ -108,6 +116,7 @@ export default class App extends React.Component {
           ...prevState,
           ...toDos
         };
+        this._saveToDos(newState.toDos);
         return {...newState};
     });
   };
@@ -124,6 +133,7 @@ export default class App extends React.Component {
           }
         }
       };
+      this._saveToDos(newState.toDos);
       return {...newState};
     });
   };
@@ -140,6 +150,7 @@ export default class App extends React.Component {
           }
         }
       };
+      this._saveToDos(newState.toDos);
       return {...newState};
     });
   };
@@ -156,8 +167,13 @@ export default class App extends React.Component {
           }
         }
       };
+      this._saveToDos(newState.toDos);
       return {...newState};
     });
+  };
+
+  _saveToDos = (newTodos) => {
+    const saveToDos = AsyncStorage.setItem("toDos", JSON.stringify(newTodos));
   };
 }
 
