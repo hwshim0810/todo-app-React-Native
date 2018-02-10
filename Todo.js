@@ -1,21 +1,31 @@
 import React, { Component } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, TextInput } from "react-native";
+import PropTypes from 'prop-types';
 
 
 const { width, height } = Dimensions.get("window");
 
 export default class Todo extends Component {
 
-    state = {
-        isEditing: false,
-        isCompleted: false,
-        toDoValue: ''
+    constructor(props) {
+        super(props);
+        this.state = {
+            isEditing: false,
+            toDoValue: props.text
+        };
+    }
+
+    static propTypes = {
+        id: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
+        isCompleted: PropTypes.bool.isRequired,
+        deleteTodo: PropTypes.func.isRequired
     }
 
     render() {
         
         const { isCompleted, isEditing, toDoValue } = this.state;
-        const { text } = this.props;
+        const { text, id, deleteTodo } = this.props;
 
         return (
             <View style={styles.container}>
@@ -64,7 +74,7 @@ export default class Todo extends Component {
                                 <Text style={styles.actionText}>🖊</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPressOut={() => deleteTodo(id)}>
                             <View style={styles.actionContainer}>
                                 <Text style={styles.actionText}>❌</Text>
                             </View>
@@ -84,11 +94,8 @@ export default class Todo extends Component {
     };
 
     _startEditing = () => {
-        const { text } = this.props;
-
         this.setState({
-            isEditing: true,
-            toDoValue: text
+            isEditing: true
         });
     };
 
@@ -143,8 +150,7 @@ const styles = StyleSheet.create({
     column: {
         width: width/2,
         flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between"
+        alignItems: "center"
     },
     actions: {
         flexDirection: "row"
