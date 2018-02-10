@@ -1,5 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar, TextInput, Dimensions, Platform, ScrollView } from 'react-native';
+import { AppLoding, AppLoading } from 'expo';
+import uuidv1 from 'uuid/v1';
 import Todo from './Todo';
 
 
@@ -8,10 +10,22 @@ const { height ,width } = Dimensions.get("window");
 export default class App extends React.Component {
 
   state = {
-    newTodo: ""
+    newTodo: '',
+    loadedToDos: false
+  }
+
+  componentDidMount = () => {
+    this._loadToDos();
   }
 
   render() {
+    
+    const { newTodo, loadedToDos } = this.state;
+    
+    if (!loadedToDos) {
+      return <AppLoading />;
+    }
+
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
@@ -25,11 +39,12 @@ export default class App extends React.Component {
             placeholderTextColor={"#999"}
             returnKeyType={"done"}
             autoCorrect={false}
+            onSubmitEditing={this._addTodo}
           />
+          <ScrollView contentContainerStyle={styles.toDos}>
+            <Todo text={"Hello!!"} />          
+          </ScrollView>
         </View>
-        <ScrollView contentContainerStyle={styles.toDos}>
-          <Todo text={"Hello!!"} />          
-        </ScrollView>
       </View>
     );
   }
@@ -38,6 +53,39 @@ export default class App extends React.Component {
     this.setState({
       newTodo: text
     });
+  };
+
+  _loadToDos = () => {
+    this.setState({
+      loadedToDos: true
+    });
+  };
+
+  _addTodo = () => {
+    const { newTodo } = this.state;
+    
+    if (newTodo !== '') {
+      this.setState(prevState => {
+        const ID = uuidv1();
+        const newTodoObject = {
+          [ID]: {
+            id: ID,
+            isCompleted: false,
+            text: newTodo,
+            createdAt: Date.now()
+          }
+        };
+        const newState = {
+          ...prevState,
+          newTodo: '',
+          toDos: {
+            ...prevState.toDos,
+            ...newTodoObject
+          }
+        };
+        return { ...newState };
+      });
+    }
   };
 }
 
